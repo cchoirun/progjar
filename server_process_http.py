@@ -21,7 +21,11 @@ class ProcessTheClient(multiprocessing.Process):
 			try:
 				data = self.connection.recv(32)
 				if data:
-					d = data.decode()
+                    # Coba decode menggunakan 'latin-1' jika 'utf-8' gagal
+					try:
+						d = data.decode('utf-8')
+					except UnicodeDecodeError:
+						d = data.decode('latin-1')
 					rcv=rcv+d
 					if rcv[-2:]=='\r\n':
 						
